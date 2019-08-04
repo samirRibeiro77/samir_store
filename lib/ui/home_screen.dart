@@ -12,9 +12,12 @@ class HomeScreen extends StatelessWidget {
       controller: _pageController,
       children: <Widget>[
         Scaffold(
-          drawer: CustomDrawer(),
+          drawer: CustomDrawer(_pageController),
           body: HomeTab(),
-        )
+        ),
+        Container(color: Colors.green,),
+        Container(color: Colors.blue,),
+        Container(color: Colors.yellow,),
       ],
     );
   }
