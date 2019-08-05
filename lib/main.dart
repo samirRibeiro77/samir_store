@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:samir_store/ui/home_screen.dart';
+import 'package:samir_store/ui/screen/home_screen.dart';
 
 void main() => runApp(MyApp());
 
