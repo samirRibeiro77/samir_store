@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:samir_store/data/model/user_model.dart';
 import 'package:samir_store/ui/screen/signup_screen.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class LoginScreen extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -25,62 +27,71 @@ class LoginScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Form(
-          key: _formKey,
-          child: ListView(
-            padding: EdgeInsets.all(16.0),
-            children: <Widget>[
-              TextFormField(
-                validator: (text) {
-                  if (text.isEmpty || !text.contains("@"))
-                    return "Email inválido";
-                  return "";
-                },
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(hintText: "Email"),
-              ),
-              SizedBox(
-                height: 16.0,
-              ),
-              TextFormField(
-                validator: (text) {
-                  if (text.isEmpty || text.length < 6)
-                    return "Senha inválida";
-                  return "";
-                },
-                obscureText: true,
-                decoration: InputDecoration(hintText: "Senha"),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: FlatButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: null,
-                  child:
-                      Text("Esqueci minha senha", textAlign: TextAlign.right),
-                ),
-              ),
-              SizedBox(
-                height: 16.0,
-              ),
-              SizedBox(
-                height: 44.0,
-                child: RaisedButton(
-                  textColor: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                  child: Text(
-                    "Entrar",
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  onPressed: () {
-                    if (_formKey.currentState.validate()) {
+      body: ScopedModelDescendant<UserModel>(
+        builder: (context, child, model) {
+          if (model.isLoading)
+            return Center(child: CircularProgressIndicator());
 
-                    }
-                  },
-                ),
+          return Form(
+              key: _formKey,
+              child: ListView(
+                padding: EdgeInsets.all(16.0),
+                children: <Widget>[
+                  TextFormField(
+                    validator: (text) {
+                      if (text.isEmpty || !text.contains("@"))
+                        return "Email inválido";
+                      return "";
+                    },
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(hintText: "Email"),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  TextFormField(
+                    validator: (text) {
+                      if (text.isEmpty || text.length < 6)
+                        return "Senha inválida";
+                      return "";
+                    },
+                    obscureText: true,
+                    decoration: InputDecoration(hintText: "Senha"),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: FlatButton(
+                      padding: EdgeInsets.zero,
+                      onPressed: null,
+                      child:
+                      Text("Esqueci minha senha", textAlign: TextAlign.right),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  SizedBox(
+                    height: 44.0,
+                    child: RaisedButton(
+                      textColor: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                      child: Text(
+                        "Entrar",
+                        style: TextStyle(fontSize: 18.0),
+                      ),
+                      onPressed: () {
+                        model.signIn();
+                        if (_formKey.currentState.validate()) {
+
+                        }
+                      },
+                    ),
+                  )
+                ],
               )
-            ],
-          )),
+          );
+        },
+      )
     );
   }
 }
