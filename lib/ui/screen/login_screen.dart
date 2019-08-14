@@ -80,7 +80,6 @@ class LoginScreen extends StatelessWidget {
                         style: TextStyle(fontSize: 18.0),
                       ),
                       onPressed: () {
-                        model.signIn();
                         if (_formKey.currentState.validate()) {
 
                         }
