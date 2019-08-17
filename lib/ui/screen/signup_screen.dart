@@ -10,25 +10,47 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _addressController = TextEditingController();
 
-  void _onSuccess() {}
+  void _onSuccess() {
+    _scaffoldKey.currentState.showSnackBar(
+      SnackBar(
+          content: Text("Usuário criado com sucesso"),
+        backgroundColor: Theme.of(context).primaryColor,
+        duration: Duration(seconds: 2),
+      )
+    );
 
-  void _onFail() {}
+    Future.delayed(Duration(seconds: 2)).then((_) {
+      Navigator.of(context).pop();
+    });
+  }
+
+  void _onFail() {
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text("Falha ao criar usuário"),
+          backgroundColor: Colors.redAccent,
+          duration: Duration(seconds: 2),
+        )
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Criar conta"),
           centerTitle: true,
         ),
         body:
-        ScopedModelDescendant<UserModel>(builder: (context, child, model) {
+            ScopedModelDescendant<UserModel>(builder: (context, child, model) {
           if (model.isLoading)
             return Center(child: CircularProgressIndicator());
 
@@ -82,28 +104,28 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 16.0,
                   ),
                   SizedBox(
-                    height: 44.0,
-                    child: RaisedButton(
-                      textColor: Colors.white,
-                      color: Theme.of(context).primaryColor,
-                      child: Text(
-                        "Criar conta",
-                        style: TextStyle(fontSize: 18.0),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          var user = UserData(_nameController.text,
-                              _emailController.text, _addressController.text);
+                      height: 44.0,
+                      child: RaisedButton(
+                          textColor: Colors.white,
+                          color: Theme.of(context).primaryColor,
+                          child: Text(
+                            "Criar conta",
+                            style: TextStyle(fontSize: 18.0),
+                          ),
+                          onPressed: () {
+                            if (_formKey.currentState.validate()) {
+                              var user = UserData(
+                                  _nameController.text,
+                                  _emailController.text,
+                                  _addressController.text);
 
-                          model.signUp(
-                              userData: user,
-                              password: _passwordController.text,
-                              onSuccess: _onSuccess,
-                              onError: _onFail);
-                        }
-                      }
-                    )
-                  )
+                              model.signUp(
+                                  userData: user,
+                                  password: _passwordController.text,
+                                  onSuccess: _onSuccess,
+                                  onError: _onFail);
+                            }
+                          }))
                 ],
               ));
         }));

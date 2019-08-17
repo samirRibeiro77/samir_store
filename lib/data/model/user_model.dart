@@ -9,9 +9,12 @@ import '../user_data.dart';
 class UserModel extends Model {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _firebaseUser;
-  UserData userData;
+  UserData _userData;
 
   bool isLoading = false;
+  bool get isLoggendIn => _firebaseUser != null;
+  String get userName => isLoggendIn ? _userData.name : "";
+
 
   void _startLoading() {
     isLoading = true;
@@ -24,7 +27,7 @@ class UserModel extends Model {
   }
 
   Future<Null> _saveUser(UserData userData) async {
-    this.userData = userData;
+    this._userData = userData;
     Firestore.instance.collection("users").document(_firebaseUser.uid).setData(userData.toMap());
   }
 
@@ -60,7 +63,18 @@ class UserModel extends Model {
     notifyListeners();
   }
 
-//void recoverPassword(){}
+  void signOut() async {
+    isLoading = true;
+    notifyListeners();
 
-//bool isLoggend(){}
+    await _auth.signOut();
+
+    _userData = null;
+    _firebaseUser = null;
+
+    isLoading = false;
+    notifyListeners();
+  }
+
+//void recoverPassword(){}
 }

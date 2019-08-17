@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:samir_store/data/model/user_model.dart';
 import 'package:samir_store/ui/screen/login_screen.dart';
 import 'package:samir_store/ui/widget/tile/drawer_tile.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class CustomDrawer extends StatelessWidget {
   final PageController _pageControler;
@@ -40,32 +42,43 @@ class CustomDrawer extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      left: 0.0,
-                      bottom: 0.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            "Olá, ",
-                            style: TextStyle(
-                                fontSize: 18.0, fontWeight: FontWeight.bold),
-                          ),
-                          GestureDetector(
-                            onTap: (){
-                              Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => LoginScreen())
-                              );
-                            },
-                            child: Text(
-                              "Entre ou cadastre-se",
-                              style: TextStyle(
-                                  color: Theme.of(context).primaryColor,
-                                  fontSize: 16.0, fontWeight: FontWeight.bold),
-                            ),
-                          )
-                        ],
-                      ),
-                    )
+                        left: 0.0,
+                        bottom: 0.0,
+                        child: ScopedModelDescendant<UserModel>(
+                            builder: (context, child, model) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                "Olá, ${!model.isLoggendIn ? "" : model.userName}",
+                                style: TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  if (!model.isLoggendIn) {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                LoginScreen()));
+                                  } else {
+                                    model.signOut();
+                                  }
+                                },
+                                child: Text(
+                                  !model.isLoggendIn
+                                      ? "Entre ou cadastre-se"
+                                      : "Sair",
+                                  style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              )
+                            ],
+                          );
+                        }))
                   ],
                 ),
               ),
@@ -73,7 +86,8 @@ class CustomDrawer extends StatelessWidget {
               DrawerTile(Icons.home, "Inicio", _pageControler, 0),
               DrawerTile(Icons.list, "Produtos", _pageControler, 1),
               DrawerTile(Icons.location_on, "Lojas", _pageControler, 2),
-              DrawerTile(Icons.playlist_add_check, "Meus pedidos", _pageControler, 3),
+              DrawerTile(
+                  Icons.playlist_add_check, "Meus pedidos", _pageControler, 3),
             ],
           )
         ],
