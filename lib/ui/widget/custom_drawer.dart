@@ -4,6 +4,8 @@ import 'package:samir_store/ui/screen/login_screen.dart';
 import 'package:samir_store/ui/widget/tile/drawer_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'exit_dialog.dart';
+
 class CustomDrawer extends StatelessWidget {
   final PageController _pageControler;
 
@@ -63,7 +65,9 @@ class CustomDrawer extends StatelessWidget {
                                             builder: (context) =>
                                                 LoginScreen()));
                                   } else {
-                                    model.signOut();
+                                    var exit = ExitDialog();
+                                    exit.build(context, model);
+                                    //model.signOut();
                                   }
                                 },
                                 child: Text(
