@@ -14,6 +14,14 @@ class ProductData {
     this._sizes = doc.data["sizes"];
   }
 
+  Map<String, dynamic> toResumeMap() {
+    return {
+      "title": this._title,
+      "description": this._description,
+      "price": this._price
+    };
+  }
+
   List get sizes => _sizes;
   List get images => _images;
   double get price => _price;
