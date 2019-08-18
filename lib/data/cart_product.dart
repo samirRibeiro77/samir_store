@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import '../product_data.dart';
+import 'package:samir_store/data/product_data.dart';
 
 class CartProduct {
-  String cartId;
+  String cartProductId;
   String _category;
   String _productId;
   int _quantity;
@@ -12,7 +11,7 @@ class CartProduct {
   ProductData _product;
 
   CartProduct.fromDocument(DocumentSnapshot doc) {
-    this.cartId = doc.documentID;
+    this.cartProductId = doc.documentID;
     this._category = doc.data["category"];
     this._productId = doc.data["productId"];
     this._quantity = doc.data["quantity"];

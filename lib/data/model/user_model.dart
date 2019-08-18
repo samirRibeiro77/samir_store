@@ -14,6 +14,7 @@ class UserModel extends Model {
   bool isLoading = false;
   bool get isLoggendIn => _firebaseUser != null;
   String get userName => isLoggendIn ? _userData.name : "";
+  String get userId => _firebaseUser != null ? _firebaseUser.uid : "";
 
 
   @override
