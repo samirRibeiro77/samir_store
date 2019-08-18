@@ -16,6 +16,12 @@ class UserModel extends Model {
   String get userName => isLoggendIn ? _userData.name : "";
 
 
+  @override
+  void addListener(VoidCallback listener) {
+    super.addListener(listener);
+    _loadUser();
+  }
+
   void _startLoading() {
     isLoading = true;
     notifyListeners();
@@ -31,6 +37,19 @@ class UserModel extends Model {
     Firestore.instance.collection("users").document(_firebaseUser.uid).setData(userData.toMap());
   }
 
+  Future<Null> _loadUser() async {
+    if(_firebaseUser == null) {
+      _firebaseUser = await _auth.currentUser();
+    }
+
+    if(_firebaseUser != null && _userData == null) {
+      var docSnapshot = await Firestore.instance.collection("users").document(_firebaseUser.uid).get();
+      _userData = UserData.fromMap(docSnapshot.data);
+    }
+
+    notifyListeners();
+  }
+
   void signUp(
       {@required UserData userData,
       @required String password,
@@ -43,37 +62,51 @@ class UserModel extends Model {
         email: userData.email,
         password: password
     ).then((user) async {
+
       _firebaseUser = user;
       await _saveUser(userData);
       onSuccess();
-      _finishLoading();
+
     }).catchError((e) {
+
       onError();
-      _finishLoading();
-    });
+
+    }).whenComplete((){_finishLoading();});
   }
 
-  void signIn() async {
-    isLoading = true;
-    notifyListeners();
+  void signIn({
+    @required String email,
+    @required String password,
+    @required VoidCallback onSuccess,
+    @required VoidCallback onError
+  }) async {
+    _startLoading();
 
-    await Future.delayed(Duration(seconds: 5));
+    await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password
+    ).then((user) async {
 
-    isLoading = false;
-    notifyListeners();
+      _firebaseUser = user;
+      await _loadUser();
+      onSuccess();
+
+    }).catchError((e) {
+
+      onError();
+
+    }).whenComplete((){_finishLoading();});
   }
 
   void signOut() async {
-    isLoading = true;
-    notifyListeners();
+    _startLoading();
 
     await _auth.signOut();
 
     _userData = null;
     _firebaseUser = null;
 
-    isLoading = false;
-    notifyListeners();
+    _finishLoading();
   }
 
 //void recoverPassword(){}

@@ -10,10 +10,27 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  void _onSuccess() {
+    Navigator.of(context).pop();
+  }
+
+  void _onFail() {
+    _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text("Falha ao entrar"),
+      backgroundColor: Colors.redAccent,
+      duration: Duration(seconds: 2),
+    ));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        key: _scaffoldKey,
         appBar: AppBar(
           title: Text("Entrar"),
           centerTitle: true,
@@ -26,8 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
               textColor: Colors.white,
               onPressed: () {
                 Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => SignupScreen())
-                );
+                    MaterialPageRoute(builder: (context) => SignupScreen()));
               },
             )
           ],
@@ -43,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: EdgeInsets.all(16.0),
                   children: <Widget>[
                     TextFormField(
+                      controller: _emailController,
                       validator: (text) {
                         if (text.isEmpty || !text.contains("@"))
                           return "Email inválido";
@@ -55,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 16.0,
                     ),
                     TextFormField(
+                      controller: _passwordController,
                       validator: (text) {
                         if (text.isEmpty || text.length < 6)
                           return "Senha inválida";
@@ -68,8 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: FlatButton(
                         padding: EdgeInsets.zero,
                         onPressed: null,
-                        child:
-                        Text("Esqueci minha senha", textAlign: TextAlign.right),
+                        child: Text("Esqueci minha senha",
+                            textAlign: TextAlign.right),
                       ),
                     ),
                     SizedBox(
@@ -85,17 +103,18 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(fontSize: 18.0),
                         ),
                         onPressed: () {
-                          if (_formKey.currentState.validate()) {
-
-                          }
+                          if (_formKey.currentState.validate()) {}
+                          model.signIn(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              onSuccess: _onSuccess,
+                              onError: _onFail);
                         },
                       ),
                     )
                   ],
-                )
-            );
+                ));
           },
-        )
-    );
+        ));
   }
 }

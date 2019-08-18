@@ -3,11 +3,17 @@ class UserData {
 
   UserData(this._name, this._email, this._address);
 
+  UserData.fromMap(Map data) {
+    this._name = data["name"];
+    this._email = data["email"];
+    this._address = data["address"];
+  }
+
   Map<String, dynamic> toMap() {
     var userMap = Map<String, dynamic>();
     userMap["name"] = this._name;
     userMap["email"] = this._email;
-    userMap["_address"] = this._address;
+    userMap["address"] = this._address;
     return userMap;
   }
 
