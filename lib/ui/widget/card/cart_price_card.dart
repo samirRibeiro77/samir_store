@@ -15,6 +15,11 @@ class CartPrice extends StatelessWidget {
         padding: EdgeInsets.all(16.0),
         child: ScopedModelDescendant<CartModel>(
           builder: (context, child, model) {
+            var price = model.getProductsPrice();
+            var discount = model.getDiscount();
+            var ship = model.getShipPrice();
+            var totalPrice = price + ship - discount;
+
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
@@ -26,25 +31,33 @@ class CartPrice extends StatelessWidget {
                 SizedBox(height: 12.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[Text("Subtotal"), Text("R\$ 22.0")],
-                ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[Text("Desconto"), Text("R\$ 22.0")],
-                ),
-                Divider(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[Text("Entrega"), Text("R\$ 22.0")],
+                  children: <Widget>[
+                    Text("Subtotal"),
+                    Text("R\$ ${price.toStringAsFixed(2)}")
+                  ],
                 ),
                 Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
+                    Text("Desconto"),
+                    Text("R\$ ${discount.toStringAsFixed(2)}")],
+                ),
+                Divider(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text("Entrega"),
+                    Text("R\$ ${ship.toStringAsFixed(2)}")],
+                ),
+                Divider(),
+                SizedBox(height: 10.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
                     Text("Total",
                         style: TextStyle(fontWeight: FontWeight.w500)),
-                    Text("R\$ 22.0",
+                    Text("R\$ ${totalPrice.toStringAsFixed(2)}",
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.w500,

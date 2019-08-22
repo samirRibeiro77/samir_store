@@ -35,11 +35,11 @@ class _DiscountCardState extends State<DiscountCard> {
                     .get()
                     .then((doc) {
                   if (doc.data != null) {
-                    CartModel.of(context).setCoupon(text, doc.data["percentage"]);
+                    CartModel.of(context).setCoupon(text, doc.data["percent"]);
 
                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text(
-                          "Desconto de ${doc.data["percentage"]} aplicado"),
+                          "Desconto de ${doc.data["percent"]} aplicado"),
                       backgroundColor: Theme.of(context).primaryColor,
                     ));
                   } else {
