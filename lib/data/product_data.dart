@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductData {
-  String _id, _title, _description, _category;
+  String _id, _title, _description, category;
   double _price;
   List _images, _sizes;
 
@@ -25,7 +25,6 @@ class ProductData {
   List get sizes => _sizes;
   List get images => _images;
   double get price => _price;
-  String get category => _category;
   String get description => _description;
   String get title => _title;
   String get id => _id;

@@ -16,6 +16,8 @@ class UserModel extends Model {
   String get userName => isLoggendIn ? _userData.name : "";
   String get userId => _firebaseUser != null ? _firebaseUser.uid : "";
 
+  static UserModel of(BuildContext context) =>
+      ScopedModel.of<UserModel>(context);
 
   @override
   void addListener(VoidCallback listener) {

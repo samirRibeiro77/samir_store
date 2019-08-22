@@ -19,6 +19,7 @@ class ExitDialog {
                 child: Text("Sim"),
                 onPressed: () {
                   model.signOut();
+                  Navigator.of(context).pop();
                 },
               )
             ],

@@ -1,6 +1,11 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:samir_store/data/cart_product.dart';
+import 'package:samir_store/data/model/cart_model.dart';
+import 'package:samir_store/data/model/user_model.dart';
 import 'package:samir_store/data/product_data.dart';
+
+import 'login_screen.dart';
 
 class ProductScreen extends StatefulWidget {
   final ProductData _product;
@@ -101,11 +106,32 @@ class _ProductScreenState extends State<ProductScreen> {
                 SizedBox(
                   height: 44.0,
                   child: RaisedButton(
-                    onPressed: selectedSize != null ? () {} : null,
+                    onPressed: selectedSize != null
+                        ? () {
+                          if(UserModel.of(context).isLoggendIn) {
+                            var cartProduct = CartProduct();
+                            cartProduct.size = selectedSize;
+                            cartProduct.quantity = 1;
+                            cartProduct.productId = _product.id;
+                            cartProduct.category = _product.category;
+
+                            CartModel.of(context).addCartItem(cartProduct);
+                          }
+                          else {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context)=>LoginScreen()
+                              )
+                            );
+                          }
+                        }
+                        : null,
                     color: primaryColor,
                     textColor: Colors.white,
                     child: Text(
-                      "Adicionar ao carrinh o",
+                      UserModel.of(context).isLoggendIn
+                          ? "Adicionar ao carrinho"
+                          : "Entre para comprar",
                       style: TextStyle(fontSize: 18.0),
                     ),
                   ),
@@ -113,10 +139,10 @@ class _ProductScreenState extends State<ProductScreen> {
                 SizedBox(height: 16.0),
                 Text("Descrição",
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
                 Text(_product.description,
                     style:
-                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500)),
               ],
             ),
           )

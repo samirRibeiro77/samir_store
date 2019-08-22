@@ -3,28 +3,30 @@ import 'package:samir_store/data/product_data.dart';
 
 class CartProduct {
   String cartProductId;
-  String _category;
-  String _productId;
-  int _quantity;
-  String _size;
+  String category;
+  String productId;
+  int quantity;
+  String size;
 
   ProductData _product;
 
+  CartProduct();
+
   CartProduct.fromDocument(DocumentSnapshot doc) {
     this.cartProductId = doc.documentID;
-    this._category = doc.data["category"];
-    this._productId = doc.data["productId"];
-    this._quantity = doc.data["quantity"];
-    this._size = doc.data["size"];
+    this.category = doc.data["category"];
+    this.productId = doc.data["productId"];
+    this.quantity = doc.data["quantity"];
+    this.size = doc.data["size"];
   }
 
   Map<String, dynamic> toMap() {
     return {
-      "category": this._category,
-      "productId": this._productId,
-      "quantity": this._quantity,
-      "size": this._size,
-      "product": this._product.toResumeMap()
+      "category": this.category,
+      "productId": this.productId,
+      "quantity": this.quantity,
+      "size": this.size,
+      "product": this._product != null ? this._product.toResumeMap() : ""
     };
   }
 }
