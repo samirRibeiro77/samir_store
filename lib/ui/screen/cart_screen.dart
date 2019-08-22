@@ -1,11 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:samir_store/data/model/cart_model.dart';
 import 'package:samir_store/data/model/user_model.dart';
+import 'package:samir_store/ui/widget/tile/cart_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'login_screen.dart';
 
 class CartScreen extends StatelessWidget {
+
+  Widget _buidCart(CartModel model) {
+    return ListView(
+      children: <Widget>[
+        Column(
+          children: model.products.map((product){
+            return CartTile(product);
+          }).toList(),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +93,9 @@ class CartScreen extends StatelessWidget {
               )
             );
           }
-
-          return null;
+          else {
+            return _buidCart(model);
+          }
         },
       ),
     );

@@ -29,4 +29,9 @@ class CartProduct {
       "product": this._product != null ? this._product.toResumeMap() : ""
     };
   }
+
+  ProductData get productData => _product;
+  set productData(ProductData value) {
+    _product = value;
+  }
 }
