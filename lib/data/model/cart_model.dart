@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:samir_store/data/model/user_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../cart_product.dart';
+import '../order_data.dart';
 
 class CartModel extends Model {
   UserModel _user;
@@ -81,6 +82,41 @@ class CartModel extends Model {
 
   double getDiscount() {
     return (getProductsPrice() * discount) / 100;
+  }
+
+  double getTotalPrice() {
+    return getProductsPrice() + getShipPrice() - getDiscount();
+  }
+
+  Future<String> finishOrder() async {
+    if(products.length == 0) return null;
+
+    isLoading = true;
+    notifyListeners();
+
+    var order = OrderData(
+        getProductsPrice(),
+        getShipPrice(),
+        getDiscount(),
+        _user.userId,
+        products
+    );
+    
+    var ref = await Firestore.instance.collection("orders").add(order.toMap());
+
+    await Firestore.instance.collection("users")
+        .document(_user.userId).collection("orders").document(ref.documentID)
+        .setData({"orderId": ref.documentID});
+
+    var productsList = List<CartProduct>();
+    products.forEach((p) => productsList.add(p));
+    productsList.forEach((p) => removeCartItem(p));
+    setCoupon(null, 0);
+
+    isLoading = false;
+    notifyListeners();
+
+    return ref.documentID;
   }
 
   void _loadCartItems() async {

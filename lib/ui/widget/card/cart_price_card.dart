@@ -18,7 +18,7 @@ class CartPrice extends StatelessWidget {
             var price = model.getProductsPrice();
             var discount = model.getDiscount();
             var ship = model.getShipPrice();
-            var totalPrice = price + ship - discount;
+            var totalPrice = model.getTotalPrice();
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
