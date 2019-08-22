@@ -8,7 +8,7 @@ class CartProduct {
   int quantity;
   String size;
 
-  ProductData _product;
+  ProductData productData;
 
   CartProduct();
 
@@ -18,6 +18,15 @@ class CartProduct {
     this.productId = doc.data["productId"];
     this.quantity = doc.data["quantity"];
     this.size = doc.data["size"];
+    getProduct().then((doc) {
+      this.productData = ProductData.fromDocument(doc);
+    });
+  }
+
+  Future<DocumentSnapshot> getProduct() async {
+    return Firestore.instance.collection("products")
+        .document(this.category).collection("items")
+        .document(this.productId).get();
   }
 
   Map<String, dynamic> toMap() {
@@ -26,12 +35,7 @@ class CartProduct {
       "productId": this.productId,
       "quantity": this.quantity,
       "size": this.size,
-      "product": this._product != null ? this._product.toResumeMap() : ""
+      "product": this.productData != null ? this.productData.toResumeMap() : ""
     };
-  }
-
-  ProductData get productData => _product;
-  set productData(ProductData value) {
-    _product = value;
   }
 }

@@ -8,7 +8,11 @@ class CartModel extends Model {
   UserModel _user;
   List<CartProduct> products = [];
 
-  CartModel(this._user);
+  CartModel(this._user){
+    if(this._user.isLoggendIn) {
+      _loadCartItems();
+    }
+  }
 
   bool isLoading = false;
 
@@ -29,6 +33,32 @@ class CartModel extends Model {
     Firestore.instance.collection("users").document(_user.userId)
         .collection("cart").document(product.cartProductId).delete();
     products.remove(product);
+
+    notifyListeners();
+  }
+
+  void decProduct(CartProduct product){
+    product.quantity--;
+    Firestore.instance.collection("users").document(_user.userId)
+        .collection("cart").document(product.cartProductId)
+        .updateData(product.toMap());
+    notifyListeners();
+  }
+
+  void incProduct(CartProduct product){
+    product.quantity++;
+    Firestore.instance.collection("users").document(_user.userId)
+        .collection("cart").document(product.cartProductId)
+        .updateData(product.toMap());
+    notifyListeners();
+  }
+
+  void _loadCartItems() async {
+    var query = await Firestore.instance.collection("users").document(_user.userId)
+        .collection("cart").getDocuments();
+
+    products = query.documents
+        .map((doc) => CartProduct.fromDocument(doc)).toList();
 
     notifyListeners();
   }
