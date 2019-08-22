@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:samir_store/data/model/cart_model.dart';
 import 'package:samir_store/data/model/user_model.dart';
-import 'package:samir_store/ui/widget/discount_card.dart';
+import 'package:samir_store/ui/widget/card/discount_card.dart';
 import 'package:samir_store/ui/widget/tile/cart_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
