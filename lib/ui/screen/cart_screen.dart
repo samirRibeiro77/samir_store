@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:samir_store/data/model/cart_model.dart';
 import 'package:samir_store/data/model/user_model.dart';
+import 'package:samir_store/ui/widget/card/cart_price_card.dart';
 import 'package:samir_store/ui/widget/card/discount_card.dart';
+import 'package:samir_store/ui/widget/card/ship_card.dart';
 import 'package:samir_store/ui/widget/tile/cart_tile.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,7 +19,9 @@ class CartScreen extends StatelessWidget {
             return CartTile(product);
           }).toList(),
         ),
-        DiscountCard()
+        DiscountCard(),
+        ShipCard(),
+        CartPrice((){})
       ],
     );
   }
