@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:samir_store/ui/tab/home_tab.dart';
 import 'package:samir_store/ui/tab/products_tab.dart';
+import 'package:samir_store/ui/widget/cart_button.dart';
 import 'package:samir_store/ui/widget/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,12 +16,14 @@ class HomeScreen extends StatelessWidget {
         Scaffold(
           drawer: CustomDrawer(_pageController),
           body: HomeTab(),
+          floatingActionButton: CartButton(),
         ),
         Scaffold(
           appBar: AppBar(
             title: Text("Produtos"),
             centerTitle: true,
           ),
+          floatingActionButton: CartButton(),
           drawer: CustomDrawer(_pageController),
           body: ProductsTab(),
         )

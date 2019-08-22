@@ -5,6 +5,7 @@ import 'package:samir_store/data/model/cart_model.dart';
 import 'package:samir_store/data/model/user_model.dart';
 import 'package:samir_store/data/product_data.dart';
 
+import 'cart_screen.dart';
 import 'login_screen.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -116,6 +117,12 @@ class _ProductScreenState extends State<ProductScreen> {
                             cartProduct.category = _product.category;
 
                             CartModel.of(context).addCartItem(cartProduct);
+
+                            Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context)=>CartScreen()
+                                )
+                            );
                           }
                           else {
                             Navigator.of(context).push(
