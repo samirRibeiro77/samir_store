@@ -17,7 +17,6 @@ class ProductData {
   Map<String, dynamic> toResumeMap() {
     return {
       "title": this._title,
-      "description": this._description,
       "price": this._price
     };
   }
